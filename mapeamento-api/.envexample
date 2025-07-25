@@ -1,0 +1,4 @@
+
+
+# Link para conexão com banco de dados com container do docker
+DATABASE_URL="postgresql://postgres:docker@localhost:5432/nome-do-banco?schema=public"
