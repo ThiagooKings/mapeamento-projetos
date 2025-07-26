@@ -15,7 +15,7 @@ datasource db {
 
 model Project {
   id          String   @id @default(uuid())
-  name        String
+  name        String   @unique
   responsible String
   createdAt   DateTime @default(now())
   status      Status   @relation(fields: [statusId], references: [id])
@@ -25,11 +25,11 @@ model Project {
 }
 
 model Geometry {
-  id          String   @id @default(uuid())
-  type        String? // ponto, polígono, circulo
-  coordinates Json?
-  createdAt   DateTime @default(now())
-  project     Project?
+  id             String   @id @default(uuid())
+  type           String? // ponto, polígono, circulo
+  coordinateType Json?
+  createdAt      DateTime @default(now())
+  project        Project?
 }
 
 model Status {
