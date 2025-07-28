@@ -34,7 +34,7 @@ model Geometry {
 
 model Status {
   id        String    @id @default(uuid())
-  name      String
+  name      String    @unique
   createdAt DateTime  @default(now())
   project   Project[]
 }
