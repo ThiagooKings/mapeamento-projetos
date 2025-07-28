@@ -6,7 +6,7 @@ import { CreateGeometryDto } from '../geometry/dto/CreateGeometry.dto';
 export type CreateProjectRequest = {
   name: string;
   responsible: string;
-  statusId?: string;
+  status?: string;
   geometry: CreateGeometryDto;
 };
 

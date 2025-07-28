@@ -3,6 +3,7 @@ import { ProjectRepositoryPrisma } from './repositories/implementations/ProjectR
 import { CreateProjectService } from './shared/createProject.service';
 import { ProjectController } from './project.controller';
 import { GeometryRepositoryPrisma } from '../geometry/repositories/implementations/GeometryRepositoryPrisma';
+import { StatusRepositoryPrisma } from '../status/repositories/implementations/StatusRepositoryPrisma';
 
 @Module({
   controllers: [ProjectController],
@@ -13,6 +14,7 @@ import { GeometryRepositoryPrisma } from '../geometry/repositories/implementatio
       useClass: ProjectRepositoryPrisma,
     },
     { provide: 'IGeometryRepository', useClass: GeometryRepositoryPrisma },
+    { provide: 'IStatusRepository', useClass: StatusRepositoryPrisma },
   ],
   exports: [CreateProjectService],
 })

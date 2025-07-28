@@ -4,6 +4,7 @@ import { IGeometryRepository } from 'src/modules/geometry/repositories/IGeometry
 
 import { Project } from '../Project.entity';
 import { CreateProjectRequest } from '../project.controller';
+import { IStatusRepository } from 'src/modules/status/repositories/IStatusRepository';
 
 @Injectable()
 export class CreateProjectService {
@@ -12,12 +13,14 @@ export class CreateProjectService {
     private readonly projectRepository: IProjectRepository,
     @Inject('IGeometryRepository')
     private readonly geometryRepository: IGeometryRepository,
+    @Inject('IStatusRepository')
+    private readonly statusRepository: IStatusRepository,
   ) {}
 
   async create({
     name,
     responsible,
-    statusId,
+    status,
     geometry,
   }: CreateProjectRequest): Promise<Project> {
     if (!name || !responsible || !geometry) {
@@ -42,6 +45,25 @@ export class CreateProjectService {
         geometry.coordinateType.radius == null)
     ) {
       throw new BadRequestException('Circle geometry requires a radius.');
+    }
+
+    let statusId: string | null;
+
+    if (status) {
+      const existingStatus = await this.statusRepository.findByName(status);
+
+      if (!existingStatus) {
+        throw new BadRequestException(`Status '${status}' does not exist.`);
+      }
+
+      statusId = existingStatus.id;
+    } else {
+      const defaultStatus = await this.statusRepository.findByName('Ativo');
+
+      if (!defaultStatus) {
+        throw new BadRequestException('Default status "Ativo" does not exist.');
+      }
+      statusId = defaultStatus.id;
     }
 
     const existingProject = await this.projectRepository.findByName(name);
