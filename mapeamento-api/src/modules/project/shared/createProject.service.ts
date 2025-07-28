@@ -17,7 +17,7 @@ export class CreateProjectService {
     private readonly statusRepository: IStatusRepository,
   ) {}
 
-  async create({
+  async execute({
     name,
     responsible,
     status,

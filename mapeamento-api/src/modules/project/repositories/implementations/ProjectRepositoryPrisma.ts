@@ -16,7 +16,9 @@ export class ProjectRepositoryPrisma implements IProjectRepository {
   }
 
   async findAll(): Promise<Project[]> {
-    return prismaClient.project.findMany();
+    return prismaClient.project.findMany({
+      include: { geometry: true, status: true },
+    });
   }
 
   async findByName(name: string): Promise<Project | null> {
