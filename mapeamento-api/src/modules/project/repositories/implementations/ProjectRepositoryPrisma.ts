@@ -12,7 +12,10 @@ export class ProjectRepositoryPrisma implements IProjectRepository {
   }
 
   async findById(id: string): Promise<Project | null> {
-    return prismaClient.project.findUnique({ where: { id } });
+    return prismaClient.project.findUnique({
+      where: { id },
+      include: { geometry: true, status: true },
+    });
   }
 
   async findAll(): Promise<Project[]> {
@@ -22,6 +25,9 @@ export class ProjectRepositoryPrisma implements IProjectRepository {
   }
 
   async findByName(name: string): Promise<Project | null> {
-    return prismaClient.project.findUnique({ where: { name } });
+    return prismaClient.project.findUnique({
+      where: { name },
+      include: { geometry: true, status: true },
+    });
   }
 }

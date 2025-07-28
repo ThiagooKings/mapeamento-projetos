@@ -1,4 +1,9 @@
-import { Inject, Injectable, BadRequestException } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { IProjectRepository } from '../repositories/IProjectRepository';
 import { IGeometryRepository } from 'src/modules/geometry/repositories/IGeometryRepository';
 
@@ -53,7 +58,7 @@ export class CreateProjectService {
       const existingStatus = await this.statusRepository.findByName(status);
 
       if (!existingStatus) {
-        throw new BadRequestException(`Status '${status}' does not exist.`);
+        throw new NotFoundException(`Status '${status}' does not found.`);
       }
 
       statusId = existingStatus.id;
@@ -61,7 +66,7 @@ export class CreateProjectService {
       const defaultStatus = await this.statusRepository.findByName('Ativo');
 
       if (!defaultStatus) {
-        throw new BadRequestException('Default status "Ativo" does not exist.');
+        throw new NotFoundException('Default status "Ativo" does not found.');
       }
       statusId = defaultStatus.id;
     }

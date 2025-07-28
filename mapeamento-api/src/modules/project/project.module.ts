@@ -6,6 +6,7 @@ import { GeometryRepositoryPrisma } from '../geometry/repositories/implementatio
 import { StatusRepositoryPrisma } from '../status/repositories/implementations/StatusRepositoryPrisma';
 import { FindAllProjectsService } from './shared/findAllProjects.service';
 import { FindByNameProjectService } from './shared/findByNameProject.service';
+import { FindByIdProjectService } from './shared/findByIdProject.service';
 
 @Module({
   controllers: [ProjectController],
@@ -13,6 +14,7 @@ import { FindByNameProjectService } from './shared/findByNameProject.service';
     CreateProjectService,
     FindAllProjectsService,
     FindByNameProjectService,
+    FindByIdProjectService,
     {
       provide: 'IProjectRepository',
       useClass: ProjectRepositoryPrisma,
@@ -24,6 +26,7 @@ import { FindByNameProjectService } from './shared/findByNameProject.service';
     CreateProjectService,
     FindAllProjectsService,
     FindByNameProjectService,
+    FindByIdProjectService,
   ],
 })
 export class ProjectModule {}
