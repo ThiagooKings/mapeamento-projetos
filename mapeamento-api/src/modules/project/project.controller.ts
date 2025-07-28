@@ -1,8 +1,9 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { CreateProjectService } from './shared/createProject.service';
 import { Project } from './Project.entity';
 import { CreateGeometryDto } from '../geometry/dto/CreateGeometry.dto';
 import { FindAllProjectsService } from './shared/findAllProjects.service';
+import { FindByNameProjectService } from './shared/findByNameProject.service';
 
 export type CreateProjectRequest = {
   name: string;
@@ -16,6 +17,7 @@ export class ProjectController {
   constructor(
     private readonly createProjectService: CreateProjectService,
     private readonly findAllProjectService: FindAllProjectsService,
+    private readonly findProjectByNameService: FindByNameProjectService,
   ) {}
 
   @Post()
@@ -26,5 +28,10 @@ export class ProjectController {
   @Get()
   async findAll(): Promise<Project[]> {
     return this.findAllProjectService.execute();
+  }
+
+  @Get('finByName')
+  async findByName(@Query('name') name?: string): Promise<Project | null> {
+    return this.findProjectByNameService.execute(name);
   }
 }
