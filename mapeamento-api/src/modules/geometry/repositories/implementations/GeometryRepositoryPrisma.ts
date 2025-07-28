@@ -7,9 +7,10 @@ import {
   Polygon,
 } from '../../geometry.entity';
 import { IGeometryRepository } from '../IGeometryRepository';
+import { CreateGeometryDto } from '../../dto/CreateGeometry.dto';
 
 export class GeometryRepositoryPrisma implements IGeometryRepository {
-  async create(data: Geometry): Promise<Geometry> {
+  async create(data: CreateGeometryDto): Promise<Geometry> {
     const created = await prismaClient.geometry.create({ data });
 
     return {

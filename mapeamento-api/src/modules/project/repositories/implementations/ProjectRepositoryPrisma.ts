@@ -4,9 +4,11 @@ import { Project } from '../../Project.entity';
 import { IProjectRepository } from '../IProjectRepository';
 
 export class ProjectRepositoryPrisma implements IProjectRepository {
-  // Implementation of the methods defined in IProjectRepository
   async create(data: CreateProjectDto): Promise<Project> {
-    return prismaClient.project.create({ data });
+    return prismaClient.project.create({
+      data,
+      include: { geometry: true, status: true },
+    });
   }
 
   async findById(id: string): Promise<Project | null> {

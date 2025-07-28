@@ -19,7 +19,7 @@ model Project {
   responsible String
   createdAt   DateTime @default(now())
   status      Status   @relation(fields: [statusId], references: [id])
-  statusId    String   @unique
+  statusId    String
   geometry    Geometry @relation(fields: [geometryId], references: [id])
   geometryId  String   @unique
 }
@@ -33,8 +33,8 @@ model Geometry {
 }
 
 model Status {
-  id        String   @id @default(uuid())
+  id        String    @id @default(uuid())
   name      String
-  createdAt DateTime @default(now())
-  project   Project?
+  createdAt DateTime  @default(now())
+  project   Project[]
 }
