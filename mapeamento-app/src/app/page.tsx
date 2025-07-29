@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   CircleMarker,
   MapContainer,
@@ -10,16 +11,23 @@ import {
 } from "react-leaflet";
 
 import "./leaflet-config";
+import { Project } from "@/types/Project";
 
 export default function Home() {
   const [search, setSearch] = useState("");
-  const [objects] = useState([
-    { id: 1, name: "Projeto A" },
-    { id: 2, name: "Projeto B" },
-    { id: 3, name: "Projeto C" },
-  ]);
+  const [projects, setProjects] = useState([] as Project[]);
+  const [selectedProject, setSelectedProject] = useState({} as Project);
 
-  const filtered = objects.filter((obj) =>
+  useEffect(() => {
+    axios
+      .get("http://localhost:3333/projects")
+      .then((response) => setProjects(response.data))
+      .catch((error) => console.error("Erro ao buscar projetos:", error));
+  }, []);
+
+  console.log("Projects:", projects);
+
+  const filtered = projects.filter((obj) =>
     obj.name.toLowerCase().includes(search.toLowerCase())
   );
 
