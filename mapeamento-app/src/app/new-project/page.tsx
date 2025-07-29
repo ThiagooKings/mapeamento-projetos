@@ -1,3 +1,5 @@
+"use client";
+
 export default function NewProjectPage() {
-  return <h1>Criar Novo Projeto</h1>;
+  return <h1>New Project Page</h1>;
 }
