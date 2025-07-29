@@ -3,18 +3,22 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
+  Circle,
   CircleMarker,
   MapContainer,
   Marker,
+  Polygon,
   Popup,
   TileLayer,
 } from "react-leaflet";
 
 import "./leaflet-config";
 import { Project } from "@/types/Project";
+import MapController from "@/components/MapController";
 
 export default function Home() {
   const [search, setSearch] = useState("");
+  const [zoomScale, setZoomScale] = useState(2);
   const [projects, setProjects] = useState([] as Project[]);
   const [selectedProject, setSelectedProject] = useState({} as Project);
 
@@ -25,10 +29,10 @@ export default function Home() {
       .catch((error) => console.error("Erro ao buscar projetos:", error));
   }, []);
 
-  console.log("Projects:", projects);
+  console.log("selected project:", projects);
 
-  const filtered = projects.filter((obj) =>
-    obj.name.toLowerCase().includes(search.toLowerCase())
+  const filtered = projects.filter((project) =>
+    project.name.toLowerCase().includes(search.toLowerCase())
   );
 
   const redOptions = { color: "red" };
@@ -45,9 +49,16 @@ export default function Home() {
           className="w-full mb-4 p-2 border border-gray-300 rounded"
         />
         <ul>
-          {filtered.map((obj) => (
-            <li key={obj.id} className="mb-2">
-              {obj.name}
+          {filtered.map((project) => (
+            <li
+              key={project.id}
+              className="mb-2 cursor-pointer"
+              onClick={() => {
+                setSelectedProject(project);
+                setZoomScale(10);
+              }}
+            >
+              {project.name}
             </li>
           ))}
         </ul>
@@ -55,26 +66,84 @@ export default function Home() {
       <div className="flex-1 p-6">
         <MapContainer
           center={[51.505, -0.09]}
-          zoom={13}
+          zoom={zoomScale}
           scrollWheelZoom={false}
           className="w-full h-full"
         >
+          <MapController
+            zoom={zoomScale}
+            position={
+              selectedProject.geometry?.type === "Polygon"
+                ? Array.isArray(
+                    selectedProject.geometry.coordinateType?.coordinates
+                  ) &&
+                  selectedProject.geometry.coordinateType?.coordinates.length >
+                    0
+                  ? (selectedProject.geometry.coordinateType
+                      ?.coordinates[0] as [number, number])
+                  : undefined
+                : selectedProject.geometry?.type === "Point" ||
+                  selectedProject.geometry?.type === "Circle"
+                ? (selectedProject.geometry.coordinateType?.coordinates as [
+                    number,
+                    number
+                  ])
+                : undefined
+            }
+          />
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          <Marker position={[51.505, -0.09]}>
-            <Popup>
-              A pretty CSS3 popup. <br /> Easily customizable.
-            </Popup>
-          </Marker>
-          <CircleMarker
-            center={[51.51, -0.12]}
-            pathOptions={redOptions}
-            radius={20}
-          >
-            <Popup>Popup in CircleMarker</Popup>
-          </CircleMarker>
+
+          {selectedProject.geometry?.type === "Point" && (
+            <Marker
+              position={
+                selectedProject.geometry.coordinateType?.coordinates as [
+                  number,
+                  number
+                ]
+              }
+            >
+              <Popup>{selectedProject.name}</Popup>
+            </Marker>
+          )}
+
+          {selectedProject.geometry?.type === "Polygon" && (
+            <Polygon
+              pathOptions={redOptions}
+              positions={
+                (selectedProject.geometry.coordinateType?.coordinates as
+                  | [number, number][]
+                  | undefined) || []
+              }
+            >
+              <Popup>{selectedProject.name}</Popup>
+            </Polygon>
+          )}
+
+          {selectedProject.geometry?.type === "Circle" && (
+            <Circle
+              center={
+                selectedProject.geometry.coordinateType?.coordinates as [
+                  number,
+                  number
+                ]
+              }
+              pathOptions={redOptions}
+              radius={
+                selectedProject.geometry?.type === "Circle"
+                  ? (
+                      selectedProject.geometry.coordinateType as {
+                        radius?: number;
+                      }
+                    )?.radius || 20
+                  : 20
+              }
+            >
+              <Popup>{selectedProject.name}</Popup>
+            </Circle>
+          )}
         </MapContainer>
       </div>
     </div>

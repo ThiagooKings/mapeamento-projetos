@@ -15,7 +15,7 @@ type Status = {
   createdAt: string;
 };
 
-type Geometry = {
+export type Geometry = {
   id: string;
   type: string;
   coordinateType: Circle | Point | Polygon | MultiPolygon;
@@ -33,7 +33,7 @@ type Point = {
   coordinates: [number, number];
 };
 
-type Circle = {
+export type Circle = {
   coordinates: [number, number];
   radius: number;
 };
