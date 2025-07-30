@@ -33,8 +33,6 @@ export default function Home() {
     import("../utils/leaflet-config");
   }, []);
 
-  console.log("selected project:", projects);
-
   const filtered = projects.filter((project) =>
     project.name.toLowerCase().includes(search.toLowerCase())
   );
@@ -45,10 +43,13 @@ export default function Home() {
       <div className="w-[30%] border-r border-gray-400 p-6 overflow-y-auto">
         <Link
           href="/criar-projeto"
-          className="mb-4 inline-block px-4 py-2 bg-[#282a36] text-white rounded hover:bg-slate-700 transition border-1 border-gray-400"
+          className="mb-4 inline-block px-4 py-2 bg-[#282a36] text-white rounded hover:bg-slate-700 transition border border-gray-400"
         >
           Criar projeto
         </Link>
+        <h2 className="text-xl font-bold mb-4 text-[#282a36] dark:text-white">
+          Projetos cadastrados:
+        </h2>
         <input
           type="text"
           placeholder="Buscar projeto..."
@@ -69,7 +70,7 @@ export default function Home() {
               }`}
               onClick={() => {
                 setSelectedProject(project);
-                setZoomScale(11);
+                setZoomScale(12);
               }}
             >
               <span className="font-semibold text-lg">{project.name}</span>
