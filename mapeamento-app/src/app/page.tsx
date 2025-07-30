@@ -55,7 +55,7 @@ export default function Home() {
               className="mb-2 cursor-pointer"
               onClick={() => {
                 setSelectedProject(project);
-                setZoomScale(10);
+                setZoomScale(11);
               }}
             >
               {project.name}
@@ -73,7 +73,21 @@ export default function Home() {
           <MapController
             zoom={zoomScale}
             position={
-              selectedProject.geometry?.type === "Polygon"
+              selectedProject.geometry?.type === "MultiPolygon"
+                ? Array.isArray(
+                    selectedProject.geometry.coordinateType?.coordinates
+                  ) &&
+                  selectedProject.geometry.coordinateType?.coordinates.length >
+                    0 &&
+                  Array.isArray(
+                    selectedProject.geometry.coordinateType?.coordinates[0]
+                  ) &&
+                  selectedProject.geometry.coordinateType?.coordinates[0]
+                    .length > 0
+                  ? (selectedProject.geometry.coordinateType
+                      ?.coordinates[0][0] as unknown as [number, number])
+                  : undefined
+                : selectedProject.geometry?.type === "Polygon"
                 ? Array.isArray(
                     selectedProject.geometry.coordinateType?.coordinates
                   ) &&
@@ -122,6 +136,18 @@ export default function Home() {
             </Polygon>
           )}
 
+          {selectedProject.geometry?.type === "MultiPolygon" && (
+            <Polygon
+              pathOptions={redOptions}
+              positions={
+                (selectedProject.geometry.coordinateType?.coordinates as
+                  | [number, number][]
+                  | undefined) || []
+              }
+            >
+              <Popup>{selectedProject.name}</Popup>
+            </Polygon>
+          )}
           {selectedProject.geometry?.type === "Circle" && (
             <Circle
               center={
