@@ -2,21 +2,53 @@
 
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import {
-  Circle,
-  MapContainer,
-  Marker,
-  Polygon,
-  Popup,
-  TileLayer,
-} from "react-leaflet";
+import dynamic from "next/dynamic";
 import Link from "next/link";
+import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerShadow from "leaflet/dist/images/marker-shadow.png";
 
 import { Project } from "@/types/Project";
 import MapController from "@/components/MapController";
 import { selectColor } from "@/utils/SelectColor";
 
+// Importa o MapContainer e componentes do react-leaflet apenas no client
+const MapContainer = dynamic(
+  () => import("react-leaflet").then((mod) => mod.MapContainer),
+  { ssr: false }
+);
+const TileLayer = dynamic(
+  () => import("react-leaflet").then((mod) => mod.TileLayer),
+  { ssr: false }
+);
+const Marker = dynamic(
+  () => import("react-leaflet").then((mod) => mod.Marker),
+  { ssr: false }
+);
+const Polygon = dynamic(
+  () => import("react-leaflet").then((mod) => mod.Polygon),
+  { ssr: false }
+);
+const Popup = dynamic(() => import("react-leaflet").then((mod) => mod.Popup), {
+  ssr: false,
+});
+const Circle = dynamic(
+  () => import("react-leaflet").then((mod) => mod.Circle),
+  { ssr: false }
+);
+
 export default function Home() {
+  useEffect(() => {
+    // Importa Leaflet apenas no cliente
+    import("leaflet").then((L) => {
+      L.Icon.Default.mergeOptions({
+        iconRetinaUrl: markerIcon2x.src ?? markerIcon2x,
+        iconUrl: markerIcon.src ?? markerIcon,
+        shadowUrl: markerShadow.src ?? markerShadow,
+      });
+    });
+  }, []);
+
   const [search, setSearch] = useState("");
   const [zoomScale, setZoomScale] = useState(2);
   const [projects, setProjects] = useState([] as Project[]);
@@ -27,10 +59,6 @@ export default function Home() {
       .get("http://localhost:3333/projects")
       .then((response) => setProjects(response.data))
       .catch((error) => console.error("Erro ao buscar projetos:", error));
-  }, []);
-
-  React.useEffect(() => {
-    import("../utils/leaflet-config");
   }, []);
 
   const filtered = projects.filter((project) =>
