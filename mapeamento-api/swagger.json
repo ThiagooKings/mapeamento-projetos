@@ -1,0 +1,194 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Mapeamento Projetos API",
+    "version": "1.0.0",
+    "description": "API para gerenciamento de projetos georreferenciados"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3333"
+    }
+  ],
+  "paths": {
+    "/projects": {
+      "post": {
+        "summary": "Cria um novo projeto",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProjectRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Projeto criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Lista todos os projetos",
+        "responses": {
+          "200": {
+            "description": "Lista de projetos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Project"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/findByName": {
+      "get": {
+        "summary": "Busca projeto pelo nome",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "name",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Nome do projeto"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Projeto encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Projeto não encontrado"
+          }
+        }
+      }
+    },
+    "/projects/findById/{id}": {
+      "get": {
+        "summary": "Busca projeto pelo ID",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "ID do projeto"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Projeto encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Projeto não encontrado"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CreateProjectRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "responsible": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "geometry": {
+            "$ref": "#/components/schemas/CreateGeometryDto"
+          }
+        },
+        "required": [
+          "name",
+          "responsible",
+          "geometry"
+        ]
+      },
+      "CreateGeometryDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "Point"
+          },
+          "coordinateType": {
+            "type": "object",
+            "properties": {
+              "coordinates": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                }
+              },
+              "radius": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "coordinates"
+            ]
+          }
+        }
+      },
+      "Project": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "responsible": {
+            "type": "string"
+          },
+          "statusId": {
+            "type": "string"
+          },
+          "geometryId": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
