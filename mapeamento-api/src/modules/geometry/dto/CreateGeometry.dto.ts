@@ -1,5 +1,5 @@
 import { IsObject, IsString } from 'class-validator';
-import { Circle, MultiPolygon, Point, Polygon } from '../geometry.entity';
+import { Circle, MultiPolygon, Point, Polygon } from '../Geometry.entity';
 
 export class CreateGeometryDto {
   @IsString()

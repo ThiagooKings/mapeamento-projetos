@@ -5,7 +5,7 @@ import {
   MultiPolygon,
   Point,
   Polygon,
-} from '../../geometry.entity';
+} from '../../Geometry.entity';
 import { IGeometryRepository } from '../IGeometryRepository';
 import { CreateGeometryDto } from '../../dto/CreateGeometry.dto';
 

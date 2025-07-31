@@ -1,5 +1,5 @@
 import { CreateGeometryDto } from '../dto/CreateGeometry.dto';
-import { Geometry } from '../geometry.entity';
+import { Geometry } from '../Geometry.entity';
 
 export interface IGeometryRepository {
   create(data: CreateGeometryDto): Promise<Geometry>;
