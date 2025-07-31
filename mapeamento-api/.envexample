@@ -1,4 +1,7 @@
-
-
 # Link para conexão com banco de dados com container do docker
-DATABASE_URL="postgresql://postgres:docker@localhost:5432/nome-do-banco?schema=public"
+
+# ANTES DE SUBIR O CONTAINER NO DOCKER, CRIAR UM ARQUIVO .env EXATAMENTE COM:
+
+# RODAR COMANDO docker-compose up --build APÓS CRIAÇÃO DO .env
+
+DATABASE_URL="postgresql://postgres:docker@postgres:5432/mapeamento-ambiental?schema=public"
