@@ -276,7 +276,6 @@ export default function NewProjectPage() {
             </div>
           )}
 
-          {/* Responsável */}
           <label
             htmlFor="responsavel"
             className="block text-sm font-medium mb-1"
@@ -290,9 +289,8 @@ export default function NewProjectPage() {
             onChange={(e) => setResponsavel(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
           />
-          {/* Botão de submit pode ser adicionado futuramente */}
         </form>
-        {/* Botões fixos */}
+
         <div className="absolute left-6 bottom-6 flex justify-between w-[calc(100%-3rem)]">
           <button
             type="button"
