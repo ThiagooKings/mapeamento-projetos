@@ -1,7 +1,8 @@
 import prismaClient from 'src/prisma';
-import { CreateProjectDto } from '../../dto/CreateProject.dto';
+
 import { Project } from '../../Project.entity';
 import { IProjectRepository } from '../IProjectRepository';
+import { CreateProjectDto } from '../../dto/CreateProject.dto';
 
 export class ProjectRepositoryPrisma implements IProjectRepository {
   async create(data: CreateProjectDto): Promise<Project> {
